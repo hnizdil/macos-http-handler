@@ -16,11 +16,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 
 	func applicationDidFinishLaunching(_: Notification) {
+		// For http:// or https://
 		NSAppleEventManager.shared().setEventHandler(
 			self,
 			andSelector: #selector(openUrl(withEvent:)),
 			forEventClass: AEEventClass(kInternetEventClass),
 			andEventID: AEEventID(kAEGetURL)
+		)
+		// For file://
+		NSAppleEventManager.shared().setEventHandler(
+			self,
+			andSelector: #selector(openUrl(withEvent:)),
+			forEventClass: AEEventClass(kCoreEventClass),
+			andEventID: AEEventID(kAEOpenDocuments)
 		)
 		if let bundleId = Bundle.main.bundleIdentifier as CFString? {
 			LSSetDefaultHandlerForURLScheme("http" as CFString, bundleId)
