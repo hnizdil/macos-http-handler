@@ -3,11 +3,11 @@ struct Config: Decodable {
 	let application: String
 	let urlPatterns: [String]
 
-	func matches(url: String) -> Bool {
+	func matches(url: String) -> String? {
 		for pattern in urlPatterns where url ~= pattern {
-			return true
+			return pattern
 		}
-		return false
+		return nil
 	}
 
 }

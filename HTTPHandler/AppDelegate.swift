@@ -8,7 +8,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	var logger: Logger = {
 		let subsystem = Bundle.main.bundleIdentifier!
-		return Logger(subsystem: subsystem, category: "viewcycle")
+		return Logger(subsystem: subsystem, category: "default")
 	}()
 
 	struct HTTPHandlerError: Error {
@@ -37,9 +37,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			guard let url = event.paramDescriptor(forKeyword: AEKeyword(keyDirectObject))?.stringValue else {
 				throw HTTPHandlerError(message: "Failed to get URL parameter")
 			}
-			for config in try configs() where config.matches(url: url) {
-				App(config: config, url: url, logger: logger).launch()
-				return
+			for config in try configs() {
+				if let matchedPattern = config.matches(url: url) {
+					logger.info("Matched '\(matchedPattern, privacy: .public)'")
+					App(config: config, url: url, logger: logger).launch()
+					return
+				}
 			}
 			throw HTTPHandlerError(message: "Suitable config not found")
 		}
