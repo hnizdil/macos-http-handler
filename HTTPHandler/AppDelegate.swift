@@ -40,7 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			for config in try configs() {
 				if let matchedPattern = config.matches(url: url) {
 					logger.info("Matched '\(matchedPattern, privacy: .public)'")
-					App(config: config, url: url, logger: logger).launch()
+					App(config: config, logger: logger).launch(url: url)
 					return
 				}
 			}

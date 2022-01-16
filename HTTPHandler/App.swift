@@ -3,24 +3,22 @@ import struct os.Logger
 
 class App {
 
-	let path: String
-	let args: [String]
+	let config: Config
 	let logger: Logger
-	let process: Process
 
-	init(config: Config, url: String, logger: Logger) {
-		path = "/usr/bin/open"
-		args = ["-a", config.application, url]
-		process = Process()
-		process.launchPath = path
-		process.arguments = args
+	init(config: Config, logger: Logger) {
+		self.config = config
 		self.logger = logger
 	}
 
-	func launch() {
+	func launch(url: String) {
+		let path = "/usr/bin/open"
+		let args = ["-a", config.application, url]
+		let process = Process()
+		process.launchPath = path
+		process.arguments = args
 		process.launch()
-		let args = self.args.joined(separator: " ")
-		logger.info("Launched: \(self.path, privacy: .public) \(args, privacy: .public)")
+		logger.info("Launched: \(path, privacy: .public) \(args.joined(separator: " "), privacy: .public)")
 	}
 
 }
